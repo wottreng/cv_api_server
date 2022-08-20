@@ -2,14 +2,13 @@
 """
 Perform test request
 """
-import os.path
+
 import pprint
 
 import requests
 
-# DETECTION_URL = "http://localhost:1300/"
-DETECTION_URL = "http://10.42.112.19:1300/"
-IMAGE = os.path.join(os.getcwd(), "data", "zidane.jpg")
+DETECTION_URL = "http://localhost:5000/v1/object-detection/yolov5s"
+IMAGE = "zidane.jpg"
 
 # Read image
 with open(IMAGE, "rb") as f:

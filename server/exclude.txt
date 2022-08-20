@@ -1,0 +1,8 @@
+venv
+.git
+.gitignore
+./server
+./data/*
+__pycache__
+./example_request.py
+./project.tar
