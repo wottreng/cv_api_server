@@ -18,6 +18,7 @@ from utils.system_utils import *
 app = Flask(__name__)
 # app.config.from_object(config)
 
+DEV = True
 
 @app.route("/", methods=["GET", "POST"])
 def predict():
@@ -25,6 +26,12 @@ def predict():
         return make_response(jsonify({"response": "get request received"}), 200)
 
     if request.method == "POST":
+        if DEV:
+            print("files: ", request.files)
+            print(request.files.get("image"))
+            print("form: ", request.form)
+            print("args: ", request.args)
+            print("data: ", request.data)
         if request.files.get("image"):
             # Method 1
             # with request.files["image"] as f:
@@ -43,10 +50,12 @@ def predict():
             something_found = False
             for line in cv_results:
                 # print(f"line: {line}")
-                if line["name"] == "person" and line["confidence"] > 0.5:
+                if line["name"] == "person" and line["confidence"] > 0.6:
                     something_found = True
                     break
             return make_response(jsonify({f"response": f"{something_found}"}), 200)
+        else:
+            return make_response(jsonify({"response": "no 'image' file found"}), 200)
 
 
 if __name__ == "__main__":

@@ -7,4 +7,4 @@ tar -cvzf project.tar -X ./server/exclude.txt ./*
 scp project.tar root@10.42.112.19:/server/yolo-api/
 ssh root@10.42.112.19 "cd /server/yolo-api/ && tar -xvzf project.tar && systemctl restart yolo-api.service"
 #
-echo "Compiled, sent to server"
+echo "sent to server"
