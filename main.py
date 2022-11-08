@@ -10,6 +10,7 @@ import io
 import torch
 from flask import Flask, request, make_response, jsonify
 from PIL import Image
+import json
 #
 from utils.file_utils import *
 from utils.time_utils import *
@@ -18,20 +19,26 @@ from utils.system_utils import *
 app = Flask(__name__)
 # app.config.from_object(config)
 
-DEV = True
+DEV = False
+
+
+@app.route("/ping", methods=["GET"])
+def ping():
+    return make_response("pong", 200)
 
 @app.route("/", methods=["GET", "POST"])
 def predict():
+    if DEV:
+        print("files: ", request.files)
+        print(request.files.get("image"))
+        print("form: ", request.form)
+        print("args: ", request.args)
+        print("data: ", request.data)
     if request.method == "GET":
         return make_response(jsonify({"response": "get request received"}), 200)
 
     if request.method == "POST":
-        if DEV:
-            print("files: ", request.files)
-            print(request.files.get("image"))
-            print("form: ", request.form)
-            print("args: ", request.args)
-            print("data: ", request.data)
+
         if request.files.get("image"):
             # Method 1
             # with request.files["image"] as f:
@@ -44,16 +51,10 @@ def predict():
 
             results = model(im, size=640)  # reduce size=320 for faster inference
 
-            # check results for a person found in picture
-            # cv_results:list = results.pandas().xyxy[0].to_json(orient="records")
+            # convert results to dict
             cv_results:list = results.pandas().xyxy[0].to_dict(orient="records")
-            something_found = False
-            for line in cv_results:
-                # print(f"line: {line}")
-                if line["name"] == "person" and line["confidence"] > 0.6:
-                    something_found = True
-                    break
-            return make_response(jsonify({f"response": f"{something_found}"}), 200)
+            # out_json = json.dumps(cv_results)
+            return make_response(jsonify({"response": cv_results}), 200)
         else:
             return make_response(jsonify({"response": "no 'image' file found"}), 200)
 
@@ -67,4 +68,5 @@ if __name__ == "__main__":
     # torch.hub._validate_not_a_forked_repo = lambda a, b, c: True
 
     model = torch.hub.load("ultralytics/yolov5", "yolov5s", force_reload=False, skip_validation=True)  # force_reload to recache
-    app.run(host="0.0.0.0", port=opt.port, debug=False, threaded=False)  # debug=True causes Restarting with stat
+    print("DEV: ", DEV)
+    app.run(host="0.0.0.0", port=opt.port, debug=True, threaded=False)  # debug=True causes Restarting with stat

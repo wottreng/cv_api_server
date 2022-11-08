@@ -8,3 +8,12 @@ scp project.tar root@10.42.112.19:/server/yolo-api/
 ssh root@10.42.112.19 "cd /server/yolo-api/ && tar -xvzf project.tar && systemctl restart yolo-api.service"
 #
 echo "sent to server"
+# check server
+echo "check server...."
+sleep 6
+resp=$(curl  "http://10.42.112.19:1300/ping")
+if [ "$resp" == "pong" ]; then
+    echo "server is up"
+else
+    echo "server is down"
+fi
