@@ -8,7 +8,7 @@ import os
 import datetime
 import json
 import ast
-from utils.system_utils import *
+from proj_utils.system_utils import *
 
 
 def write_string_to_file(data: str, path: str, filename: str, method: str = "w") -> bool:

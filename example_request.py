@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # YOLOv5 🚀 by Ultralytics, GPL-3.0 license
 """
 Perform test request
@@ -8,7 +9,7 @@ import pprint
 import requests
 
 # DETECTION_URL = "http://localhost:1300/"
-DETECTION_URL = "http://10.42.112.19:1300/"
+DETECTION_URL = "http://172.17.0.2:1300/"
 IMAGE = os.path.join(os.getcwd(), "data", "zidane.jpg")
 
 # Read image

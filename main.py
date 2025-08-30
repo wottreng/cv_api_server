@@ -12,9 +12,9 @@ from flask import Flask, request, make_response, jsonify
 from PIL import Image
 import json
 #
-from utils.file_utils import *
-from utils.time_utils import *
-from utils.system_utils import *
+from proj_utils.file_utils import *
+from proj_utils.time_utils import *
+from proj_utils.system_utils import *
 
 app = Flask(__name__)
 # app.config.from_object(config)
@@ -67,6 +67,6 @@ if __name__ == "__main__":
     # Fix known issue urllib.error.HTTPError 403: rate limit exceeded https://github.com/ultralytics/yolov5/pull/7210
     # torch.hub._validate_not_a_forked_repo = lambda a, b, c: True
 
-    model = torch.hub.load("ultralytics/yolov5", "yolov5s", force_reload=False, skip_validation=True)  # force_reload to recache
+    model = torch.hub.load("ultralytics/yolov5", "yolov5s", force_reload=True, skip_validation=True)  # force_reload to recache
     print("DEV: ", DEV)
-    app.run(host="0.0.0.0", port=opt.port, debug=True, threaded=False)  # debug=True causes Restarting with stat
+    app.run(host="0.0.0.0", port=opt.port, debug=False, threaded=False)  # debug=True causes Restarting with stat
